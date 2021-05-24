@@ -1,5 +1,11 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled, { css } from 'styled-components';
+import { Shape } from 'utils/data';
+
+type Props = {
+  color: string;
+  shape: Shape;
+};
 
 const ShapeContainer = styled.div`
   border-radius: 5px;
@@ -12,19 +18,45 @@ const ShapeContainer = styled.div`
   height: 20rem;
 `;
 
-const Shape = styled.div`
-  background-color: var(--color-blue);
-  border-radius: 50%;
+const StyledShape = styled.div<Props>`
+  background-color: ${(props) => props.color};
   width: 10rem;
-  height: 13rem;
+  height: 10rem;
+
+  ${(props) =>
+    props.shape === 'Oval' &&
+    css`
+      height: 13rem;
+      border-radius: 50%;
+    `}
+
+  ${(props) =>
+    props.shape === 'Round' &&
+    css`
+      border-radius: 50%;
+    `}
+
+   ${(props) =>
+    props.shape === 'Rectangle' &&
+    css`
+      width: 15rem;
+    `}
+
+  ${(props) =>
+    props.shape === 'Triangle' &&
+    css`
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    `}
 `;
 
-function Item() {
+const Item: React.FC<Props> = (props) => {
+  const { color, shape } = props;
+
   return (
     <ShapeContainer>
-      <Shape />
+      <StyledShape color={color} shape={shape} />
     </ShapeContainer>
   );
-}
+};
 
 export default Item;

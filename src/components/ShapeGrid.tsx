@@ -1,38 +1,36 @@
-import styled from "styled-components";
-import { colors, shapes } from "utils/data";
+import React from 'react';
+import { colors, generateShapes, Shape, shapes } from 'utils/data';
 
-import Color from "./Color/Color";
-import Heading from "./Heading/Heading";
-import Item from "./Item/Item";
-import Layout from "./Layout/Layout";
-import MiniTitle from "./MiniTitle/MiniTitle";
-import Shape from "./Shape/Shape";
-
-const Shapes = styled.div`
-  display: grid;
-  grid-template-columns: repeat(5, 10rem);
-  column-gap: 3rem;
-`;
-
-const Colors = styled.div`
-  display: grid;
-  grid-template-columns: repeat(6, min-content);
-  column-gap: 4rem;
-`;
-
-const ShapeItems = styled.div`
-  display: grid;
-  grid-template-columns: repeat(6, min-content);
-  gap: 3rem;
-`;
-
-const Wrapper = styled.div`
-  padding: 3rem 0;
-`;
-
-const shapeItems = [1, 2, 3, 4, 5, 6, 7, 8];
+import Color from './Color/Color';
+import Heading from './Heading/Heading';
+import Item from './Item/Item';
+import Layout from './Layout/Layout';
+import MiniTitle from './MiniTitle/MiniTitle';
+import ShapeColor from './ShapeColor/ShapeColor';
+import { Colors, Shapes, ShapeItems, Wrapper } from './ShapeGrid.styles';
 
 function ShapeGrid() {
+  const [selectedShapes, setSelectedShapes] = React.useState<Shape[]>([]);
+
+  const handleSelectedShape = (shape: Shape) => {
+    if (selectedShapes.includes(shape)) {
+      const newShapes = selectedShapes.filter(
+        (currentShape) => currentShape !== shape
+      );
+      setSelectedShapes(newShapes);
+    } else setSelectedShapes([...selectedShapes, shape]);
+  };
+
+  const renderShapes = () => {
+    if (selectedShapes.length !== 0) {
+      const shapes = generateShapes.filter((shape) =>
+        selectedShapes.includes(shape.shape)
+      );
+      return shapes;
+    }
+    return generateShapes;
+  };
+
   return (
     <Layout>
       <Wrapper>
@@ -41,7 +39,11 @@ function ShapeGrid() {
       </Wrapper>
       <Shapes>
         {shapes.map((shape) => (
-          <Shape key={shape} shape={shape} />
+          <ShapeColor
+            key={shape}
+            shape={shape}
+            onClick={() => handleSelectedShape(shape)}
+          />
         ))}
       </Shapes>
       <Wrapper>
@@ -53,10 +55,10 @@ function ShapeGrid() {
         </Colors>
       </Wrapper>
       <Wrapper>
-        <Heading title="All Oval Items" />
+        <Heading title="All Items" />
         <ShapeItems>
-          {shapeItems.map((item) => (
-            <Item key={item} />
+          {renderShapes().map((shape) => (
+            <Item key={shape.id} color={shape.color} shape={shape.shape} />
           ))}
         </ShapeItems>
       </Wrapper>

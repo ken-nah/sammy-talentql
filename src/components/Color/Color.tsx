@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 type Props = {
   color: string;
@@ -10,6 +10,7 @@ const StyledColor = styled.div<Props>`
   border-radius: 50%;
   background-color: ${(props) => props.color};
   box-shadow: var(--box-shadow-2);
+  cursor: pointer;
   height: 5rem;
   width: 5rem;
 `;
